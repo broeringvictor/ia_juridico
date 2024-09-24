@@ -1,0 +1,119 @@
+import sqlite3
+import json
+
+# Dados fornecidos
+data = {
+    "_default": [
+        {
+            "acao": "Ação de Alimentos",
+            "dos_fatos": {
+                "relacionamento": "As partes mantiveram uma união estável por mais de sete anos...",
+                "bens": "Em janeiro de 2021, as partes adquiriram um imóvel...",
+                # outros campos...
+            },
+            "provas_renda_genitor": "Comprovantes de rendimentos anexados.",
+            "tipo_guarda": "Guarda compartilhada",
+            "teoria_juridica": "Teoria do Melhor Interesse da Criança",
+            "teorias_adicionais": [
+                "Teoria da Solidariedade Familiar",
+                "Teoria da Aparência"
+            ],
+            "pedidos_fundamentados": "Fixação de alimentos, guarda compartilhada e regulamentação de visitas."
+        },
+        {
+            "acao": "Ação de Modificação de Guarda",
+            "dos_fatos": {
+                "relacionamento": "As partes mantiveram um relacionamento conjugal por oito anos...",
+                "separacao": "Após o término do relacionamento em julho de 2020...",
+                # outros campos...
+            },
+            "tipo_guarda": "Guarda unilateral",
+            "teoria_juridica": "Teoria do Melhor Interesse da Criança",
+            "teorias_adicionais": [
+                "Doutrina da Proteção Integral",
+                "Princípio da Prioridade Absoluta",
+                "Princípio da Paternidade Responsável"
+            ],
+            "pedidos_fundamentados": "Concessão da guarda unilateral à Requerente..."
+        }
+    ]
+}
+
+# Conectando ao banco de dados SQLite (ou criando um novo)
+conn = sqlite3.connect('database.db')
+cursor = conn.cursor()
+
+# Criando a tabela 'acoes'
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS acoes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        acao TEXT NOT NULL,
+        provas_renda_genitor TEXT,
+        tipo_guarda TEXT,
+        teoria_juridica TEXT,
+        pedidos_fundamentados TEXT
+    )
+''')
+
+# Criando a tabela 'dos_fatos'
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS dos_fatos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        acao_id INTEGER,
+        chave TEXT,
+        valor TEXT,
+        FOREIGN KEY (acao_id) REFERENCES acoes(id)
+    )
+''')
+
+# Criando a tabela 'teorias_adicionais'
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS teorias_adicionais (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        acao_id INTEGER,
+        teoria TEXT,
+        FOREIGN KEY (acao_id) REFERENCES acoes(id)
+    )
+''')
+
+# Inserindo os dados
+for item in data["_default"]:
+    # Inserindo na tabela 'acoes'
+    cursor.execute('''
+        INSERT INTO acoes (acao, provas_renda_genitor, tipo_guarda, teoria_juridica, pedidos_fundamentados)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (
+        item.get('acao'),
+        item.get('provas_renda_genitor'),
+        item.get('tipo_guarda'),
+        item.get('teoria_juridica'),
+        item.get('pedidos_fundamentados')
+    ))
+    acao_id = cursor.lastrowid
+
+    # Inserindo na tabela 'dos_fatos'
+    dos_fatos = item.get('dos_fatos', {})
+    for chave, valor in dos_fatos.items():
+        cursor.execute('''
+            INSERT INTO dos_fatos (acao_id, chave, valor)
+            VALUES (?, ?, ?)
+        ''', (
+            acao_id,
+            chave,
+            valor
+        ))
+
+    # Inserindo na tabela 'teorias_adicionais'
+    teorias = item.get('teorias_adicionais', [])
+    for teoria in teorias:
+        cursor.execute('''
+            INSERT INTO teorias_adicionais (acao_id, teoria)
+            VALUES (?, ?)
+        ''', (
+            acao_id,
+            teoria
+        ))
+
+# Salvando as alterações e fechando a conexão
+conn.commit()
+conn.close()

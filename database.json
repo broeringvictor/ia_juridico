@@ -1,0 +1,54 @@
+{
+    "_default": [
+        {
+            "acao": "Ação de Alimentos",
+            "dos_fatos": {
+                "relacionamento": "As partes mantiveram uma união estável por mais de sete anos, entre dezembro de 2013 e junho de 2021, em convivência pública, contínua e exclusiva, com o objetivo de constituir uma família. Dessa relação nasceu a filha em 16 de novembro de 2016, conforme certidão de nascimento anexada.",
+                "bens": "Em janeiro de 2021, as partes adquiriram um imóvel localizado na Guarda do Cubatão. O financiamento de R$ 153.000,00 foi feito pelo Requerido na condição de solteiro, com uma entrada de R$ 46.854,00. A Requerente, embora não tenha contribuído significativamente no pagamento das parcelas, figurou como fiadora no contrato de financiamento. Por essa razão, renuncia expressamente à sua meação no referido bem.",
+                "periodo_apos_termino": "Após o término do relacionamento em março de 2021, para facilitar o contato entre pai e filha, a Requerente alugou uma residência próxima ao imóvel do Requerido. No entanto, foi obrigada a utilizar seu limite de crédito para mobiliar a nova casa, uma vez que não lhe foi permitido levar qualquer eletrodoméstico adquirido durante a união.",
+                "filha": "A Requerente pretende a guarda compartilhada, com regulamentação das visitas para finais de semana e feriados alternados, estabelecendo a entrega da filha aos sábados, às 10 horas, e a devolução no domingo, às 18 horas, na residência fixa da criança.",
+                "desequilibrio_financeiro": "Desde o término do relacionamento, a Requerente tem arcado sozinha com a maior parte das despesas da filha e de seu novo lar, utilizando seu limite de crédito para mobiliar a casa e fornecer um ambiente adequado à criança.",
+                "impacto_psicologico": "A instabilidade na prestação de cuidados por parte do Requerido e o abandono de suas responsabilidades parentais têm afetado negativamente o desenvolvimento emocional da criança.",
+                "responsabilidade_parental": "Embora as partes tenham tentado informalmente organizar uma guarda alternada, o Requerido não se mostrou comprometido com a divisão equitativa dos cuidados da filha.",
+                "necessidade_fixacao_alimentos": "Considerando a capacidade financeira do Requerido, é imperioso que os alimentos sejam fixados em 25% de seus rendimentos líquidos.",
+                "previsibilidade_visitas": "A Requerente propõe que o regime de visitas seja estabelecido de forma fixa, com datas e horários previamente acordados, visando garantir estabilidade para a filha e segurança no cumprimento dos deveres parentais.",
+                "renda_do_pai": "O Requerido, além de seu trabalho formal como vigilante, realizava atividades como motorista de aplicativo, o que aumentava significativamente sua renda. Após ser notificado sobre a intenção da Requerente de regularizar a situação de alimentos, interrompeu essa atividade na tentativa de reduzir sua base de cálculo. Contudo, a Teoria da Aparência deve ser aplicada, considerando o padrão de vida exibido pelo Requerido, que indica uma situação financeira mais robusta.",
+                "teoria_da_aparencia": "A Teoria da Aparência, amplamente aceita pela jurisprudência, deve ser utilizada para avaliar a capacidade contributiva do Requerido, considerando sinais exteriores de riqueza. Mesmo que o Requerido alegue dificuldades financeiras, sua exibição de bens de luxo e estilo de vida nas redes sociais sugere uma renda substancial.",
+                "binomio_possibilidade_necessidade": "A fixação dos alimentos deve respeitar o binômio possibilidade-necessidade, levando em conta as necessidades da filha, como saúde, educação e lazer, e a capacidade financeira do Requerido, que possui emprego formal e historicamente complementou sua renda com atividades extras. A fixação de 25% dos rendimentos líquidos é justa e proporcionada."
+            },
+            "provas_renda_genitor": "Comprovantes de rendimentos anexados.",
+            "tipo_guarda": "Guarda compartilhada",
+            "teoria_juridica": "Teoria do Melhor Interesse da Criança",
+            "teorias_adicionais": [
+                "Teoria da Solidariedade Familiar",
+                "Teoria da Aparência"
+            ],
+            "pedidos_fundamentados": "Fixação de alimentos, guarda compartilhada e regulamentação de visitas."
+        },
+        {
+            "acao": "Ação de Modificação de Guarda",
+            "dos_fatos": {
+                "relacionamento": "As partes mantiveram um relacionamento conjugal por oito anos, entre março de 2012 e julho de 2020, em convivência pública, contínua e duradoura, com o objetivo de constituir família. Dessa união nasceram dois filhos: João, em 15 de setembro de 2014, e Maria, em 22 de maio de 2017, conforme certidões de nascimento anexadas.",
+                "separacao": "Após o término do relacionamento em julho de 2020, os filhos permaneceram sob a guarda compartilhada dos genitores, com residências alternadas a cada semana, conforme acordo informal entre as partes.",
+                "conduta_do_requerido": "O Requerido, nos últimos meses, tem apresentado comportamento negligente em relação aos cuidados parentais, chegando a deixar as crianças sozinhas em casa durante longos períodos para atender a compromissos pessoais noturnos. Há relatos de vizinhos sobre festas realizadas na presença dos menores, com consumo de álcool e outras substâncias.",
+                "ambiente_prejudicial": "O ambiente oferecido pelo Requerido tornou-se inadequado para o desenvolvimento saudável das crianças. Foram identificadas companhias duvidosas frequentando a residência, além de falta de rotina e disciplina, o que tem afetado o desempenho escolar e emocional dos menores.",
+                "incapacidade_de_cuidado": "O Requerido demonstra incapacidade em prover os cuidados básicos necessários, como alimentação adequada, higiene e acompanhamento escolar. As crianças frequentemente chegam à casa da Requerente com sinais de negligência, como roupas sujas e fome.",
+                "necessidade_guarda_unilateral": "Diante da situação apresentada, é imperiosa a concessão da guarda unilateral à Requerente, visando proteger o melhor interesse das crianças e assegurar um ambiente seguro e propício ao seu desenvolvimento integral.",
+                "tentativas_de_conciliacao": "A Requerente tentou, por diversas vezes, dialogar com o Requerido para solucionar as questões relativas aos cuidados dos filhos, sem sucesso. As tentativas de mediação familiar também não obtiveram êxito devido à falta de comprometimento do Requerido.",
+                "impacto_psicologico": "As crianças têm manifestado sinais de estresse e ansiedade, evidenciados por mudanças comportamentais, como irritabilidade e regressão em hábitos já adquiridos. A instabilidade e negligência paternas estão causando danos emocionais significativos.",
+                "teorias_juridicas": "A Requerente fundamenta seu pedido na Teoria do Melhor Interesse da Criança e na Doutrina da Proteção Integral, consagradas no Estatuto da Criança e do Adolescente e respaldadas pela jurisprudência pátria.",
+                "provas": "Anexamos relatórios psicológicos, declarações escolares, testemunhos de vizinhos e registros de ocorrências que comprovam os fatos aqui alegados.",
+                "binomio_possibilidade_necessidade": "A revisão dos alimentos é necessária, considerando o aumento das despesas com as crianças e a capacidade financeira do Requerido, que permanece inalterada.",
+                "principio_da_paternidade_responsavel": "É fundamental ressaltar o descumprimento pelo Requerido dos deveres inerentes ao poder familiar, conforme disposto no Código Civil, reforçando a necessidade da guarda unilateral em favor da Requerente."
+            },
+            "tipo_guarda": "Guarda unilateral",
+            "teoria_juridica": "Teoria do Melhor Interesse da Criança",
+            "teorias_adicionais": [
+                "Doutrina da Proteção Integral",
+                "Princípio da Prioridade Absoluta",
+                "Princípio da Paternidade Responsável"
+            ],
+            "pedidos_fundamentados": "Concessão da guarda unilateral à Requerente, fixação ou revisão de pensão alimentícia, suspensão das visitas paternas até que se restabeleça ambiente adequado ou, alternativamente, que as visitas sejam supervisionadas."
+        }
+    ]
+}

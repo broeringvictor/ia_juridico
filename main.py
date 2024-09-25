@@ -89,8 +89,9 @@ def criar_prompt_estilo(exemplos):
     )
     return prompt_estilo
 
-def criar_agente(prompt_estilo):
-    llm = ChatOpenAI(model_name='gpt-4', temperature=0.3)
+def criar_agente_dos_fatos(prompt_estilo):
+
+    llm = ChatOpenAI(model_name='gpt-4', temperature=0.5)
 
     prompt = PromptTemplate(
         input_variables=['input_text'],
@@ -210,7 +211,7 @@ def main(page: ft.Page):
 
         # Criar o prompt de estilo e o agente
         prompt_estilo = criar_prompt_estilo(exemplos)
-        agente = criar_agente(prompt_estilo)
+        agente = criar_agente_dos_fatos(prompt_estilo)
 
         # Construir o texto de entrada combinando as informações do usuário
         input_text = (
@@ -228,6 +229,18 @@ def main(page: ft.Page):
             # Usar o callback handler personalizado
             handler = MyCustomHandler()
             resposta = agente.invoke({"input_text": input_text}, config={"callbacks": [handler]})
+
+            # Extrair apenas o conteúdo textual da resposta
+            resposta_texto = resposta  # Ajuste para a versão mais recente do LangChain
+
+            # Se 'resposta' for um objeto complexo, tente acessar 'resposta['text']' ou 'resposta.content'
+            if isinstance(resposta, dict):
+                resposta_texto = resposta.get('text', '')
+            elif hasattr(resposta, 'content'):
+                resposta_texto = resposta.content
+            else:
+                resposta_texto = str(resposta)
+
         except Exception as e:
             logging.error(f"Ocorreu um erro ao gerar a resposta: {e}")
             resultado.value = "Ocorreu um erro ao gerar a resposta. Por favor, verifique o terminal para detalhes."
@@ -239,7 +252,7 @@ def main(page: ft.Page):
         tempo_total = fim - inicio
 
         # Atualizar o resultado com o tempo e a resposta
-        resultado.value = f"**Resposta Gerada:**\n\n{resposta}\n\n*Tempo de processamento: {tempo_total:.2f} segundos.*"
+        resultado.value = f"**Resposta Gerada:**\n\n{resposta_texto}\n\n*Tempo de processamento: {tempo_total:.2f} segundos.*"
         botao_copiar.visible = True
 
         # Esconder o spinner de carregamento

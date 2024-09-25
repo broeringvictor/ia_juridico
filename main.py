@@ -12,11 +12,15 @@ import logging
 # Configuração da chave da API OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
+
 if openai.api_key is None:
     print("Chave da API OpenAI não encontrada. Verifique as variáveis de ambiente.")
 
 # Configurar logging para saída no terminal
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+
 
 # Função para extrair exemplos com base no tipo de ação
 def extrair_exemplos(conn, acao_selecionada):
@@ -81,10 +85,9 @@ def criar_prompt_estilo(exemplos):
     if len(texto_exemplos) > max_length:
         texto_exemplos = texto_exemplos[:max_length]
     prompt_estilo = (
-        "Por favor, utilize os seguintes exemplos de estilo de escrita como referência ao redigir o texto. "
-        "Mantenha o embasamento legal e o tom jurídico apropriado. Evite o uso do termo 'menor', que pode ser considerado pejorativo; "
-        "em vez disso, utilize 'infante', 'criança' ou 'adolescente', conforme o caso. Substitua os nomes das partes por 'Autor' e 'Réu', conforme aplicável. "
-        "Mantenha o texto claro, formal e preciso, seguindo o estilo de escrita jurídica.\n\n"
+        "Utilize os seguintes exemplos como referência para o estilo de escrita ao redigir a seção 'Dos Fatos'. "
+        "Mantenha a linguagem formal, clara e precisa, seguindo as convenções jurídicas. "
+        "Substitua os nomes das partes por 'Autor' e 'Réu', conforme aplicável.\n\n"
         f"{texto_exemplos}\n\n"
     )
     return prompt_estilo
@@ -94,13 +97,20 @@ def criar_agente_dos_fatos(prompt_estilo):
     llm = ChatOpenAI(model_name='gpt-4', temperature=0.5)
 
     prompt = PromptTemplate(
-        input_variables=['input_text'],
-        template=(
+    input_variables=['fatos_caso', 'tipo_guarda', 'fundamentos_legais', 'provas'],
+    template=(
             f"{prompt_estilo}"
-            "Agora, com base nas informações fornecidas pelo usuário, redija a seção dos fatos seguindo o mesmo estilo e retorne em formato Markdown:\n"
-            "{input_text}\n"
+            "Com base nas informações a seguir, redija a seção 'Dos Fatos' de uma petição inicial de alimentos, utilizando um estilo jurídico adequado e mantendo a formalidade necessária:\n\n"
+            "### Fatos do Caso:\n"
+            "{fatos_caso}\n\n"
+            "### Tipo de Guarda:\n"
+            "{tipo_guarda}\n\n"
+            "### Fundamentos Legais:\n"
+            "{fundamentos_legais}\n\n"
+            "### Provas Disponíveis:\n"
+            "{provas}\n"
         )
-    )
+    )    
     # Utilizando o novo padrão com 'Runnable'
     chain = prompt | llm
     return chain
@@ -213,12 +223,193 @@ def main(page: ft.Page):
         prompt_estilo = criar_prompt_estilo(exemplos)
         agente = criar_agente_dos_fatos(prompt_estilo)
 
+        # Calcular o tempo de resposta
+        inicio = time.time()
+
+        # Obter a resposta do agente
+        try:
+            # Usar o callback handler personalizado
+            handler = MyCustomHandler()
+            resposta = agente.invoke({
+                'fatos_caso': entrada_usuario,
+                'tipo_guarda': tipo_guarda,
+                'fundamentos_legais': teorias,
+                'provas': provas
+            })
+
+            # Extrair o conteúdo textual da resposta
+            resposta_texto = resposta
+
+        except Exception as e:
+            logging.error(f"Ocorreu um erro ao gerar a resposta: {e}")
+            resultado.value = "Ocorreu um erro ao gerar a resposta. Por favor, verifique o terminal para detalhes."
+            carregando_spinner.visible = False
+            page.update()
+            return
+
+        fim = time.time()
+        tempo_total = fim - inicio
+
+        # Atualizar o resultado com o tempo e a resposta
+        resultado.value = f"**Resposta Gerada:**\n\n{resposta_texto}\n\n*Tempo de processamento: {tempo_total:.2f} segundos.*"
+        botao_copiar.visible = True
+
+        # Esconder o spinner de carregamento
+        carregando_spinner.visible = False
+        page.update()
+
+        # Salvar o prompt de entrada e a saída em um arquivo txt na pasta 'assets'
+        try:
+            # Criar a pasta 'assets' se não existir
+            if not os.path.exists('assets'):
+                os.makedirs('assets')
+
+            # Gerar um nome de arquivo único usando timestamp
+            timestamp = time.strftime("%Y%m%d-%H%M%S")
+            filename = f'assets/consulta_{timestamp}.txt'
+
+            # Preparar o conteúdo do arquivo
+            content = f"""
+                Tipo de Ação: {acao_selecionada}
+
+                Fatos do Caso:
+                {entrada_usuario}
+
+                Tipo de Guarda:
+                {tipo_guarda}
+
+                Teorias Jurídicas:
+                {teorias}
+
+                Provas:
+                {provas}
+
+                Resposta Gerada:
+                {resposta_texto}
+
+                Tempo de processamento: {tempo_total:.2f} segundos.
+                """
+
+                # Escrever o conteúdo no arquivo
+            with open(filename, 'w', encoding='utf-8') as f:
+                    f.write(content)
+        except Exception as e:
+                logging.error(f"Erro ao salvar o arquivo de registro: {e}")
+
+
+        # Extrair exemplos com base na ação selecionada
+        exemplos = extrair_exemplos(conn, acao_selecionada)
+
+        if not exemplos:
+            resultado.value = "Não foram encontrados exemplos para o tipo de ação selecionado."
+            carregando_spinner.visible = False
+            page.update()
+            return
+
+        # Criar o prompt de estilo e o agente
+        prompt_estilo = criar_prompt_estilo(exemplos)
+        agente = criar_agente_dos_fatos(prompt_estilo)
+
+        # Calcular o tempo de resposta
+        inicio = time.time()
+
+        # Obter a resposta do agente
+        try:
+            # Usar o callback handler personalizado
+            handler = MyCustomHandler()
+            resposta = agente.invoke({
+                'fatos_caso': entrada_usuario,
+                'tipo_guarda': tipo_guarda,
+                'fundamentos_legais': teorias,
+                'provas': provas
+            })
+
+            # Extrair o conteúdo textual da resposta
+            resposta_texto = resposta
+
+        except Exception as e:
+            logging.error(f"Ocorreu um erro ao gerar a resposta: {e}")
+            resultado.value = "Ocorreu um erro ao gerar a resposta. Por favor, verifique o terminal para detalhes."
+            carregando_spinner.visible = False
+            page.update()
+            return
+
+        fim = time.time()
+        tempo_total = fim - inicio
+
+        # Atualizar o resultado com o tempo e a resposta
+        resultado.value = f"**Resposta Gerada:**\n\n{resposta_texto}\n\n*Tempo de processamento: {tempo_total:.2f} segundos.*"
+        botao_copiar.visible = True
+
+        # Esconder o spinner de carregamento
+        carregando_spinner.visible = False
+        page.update()
+
+        # Salvar o prompt de entrada e a saída em um arquivo txt na pasta 'assets'
+        try:
+            # Criar a pasta 'assets' se não existir
+            if not os.path.exists('assets'):
+                os.makedirs('assets')
+
+            # Gerar um nome de arquivo único usando timestamp
+            timestamp = time.strftime("%Y%m%d-%H%M%S")
+            filename = f'assets/consulta_{timestamp}.txt'
+
+            # Preparar o conteúdo do arquivo
+            content = f"""
+                Tipo de Ação: {acao_selecionada}
+
+                Fatos do Caso:
+                {entrada_usuario}
+
+                Tipo de Guarda:
+                {tipo_guarda}
+
+                Teorias Jurídicas:
+                {teorias}
+
+                Provas:
+                {provas}
+
+                Resposta Gerada:
+                {resposta_texto}
+
+                Tempo de processamento: {tempo_total:.2f} segundos.
+                """
+
+            # Escrever o conteúdo no arquivo
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write(content)
+        except Exception as e:
+            logging.error(f"Erro ao salvar o arquivo de registro: {e}")
+
+        
+
+        # Exibir o spinner de carregamento
+        carregando_spinner.visible = True
+        resultado.value = ""
+        botao_copiar.visible = False
+        page.update()
+
+        # Extrair exemplos com base na ação selecionada
+        exemplos = extrair_exemplos(conn, acao_selecionada)
+
+        if not exemplos:
+            resultado.value = "Não foram encontrados exemplos para o tipo de ação selecionado."
+            carregando_spinner.visible = False
+            page.update()
+            return
+
+        # Criar o prompt de estilo e o agente
+        prompt_estilo = criar_prompt_estilo(exemplos)
+        agente = criar_agente_dos_fatos(prompt_estilo)
+
         # Construir o texto de entrada combinando as informações do usuário
         input_text = (
             f"Fatos do Caso:\n{entrada_usuario}\n\n"
             f"Tipo de Guarda:\n{tipo_guarda}\n\n"
-            f"Teorias Jurídicas:\n{teorias}\n\n"
-            f"Provas:\n{provas}\n"
+            f"Caso existam teorias jurídicas apresentadas a seguir, elabore o texto levando-as em consideração:\n{teorias}\n\n"
+            f"Se forem descritas provas, fundamente o texto com base nelas. Caso não seja possível compreender o contexto das provas, apenas mencione isso ao final do texto e não as utilize. Em qualquer situação, inclua as provas descritas ao final. Provas:\n{provas}\n"
         )
 
         # Calcular o tempo de resposta
@@ -228,7 +419,12 @@ def main(page: ft.Page):
         try:
             # Usar o callback handler personalizado
             handler = MyCustomHandler()
-            resposta = agente.invoke({"input_text": input_text}, config={"callbacks": [handler]})
+            resposta = agente.invoke({
+                'fatos_caso': entrada_usuario,
+                'tipo_guarda': tipo_guarda,
+                'fundamentos_legais': teorias,
+                'provas': provas
+            })
 
             # Extrair apenas o conteúdo textual da resposta
             resposta_texto = resposta  # Ajuste para a versão mais recente do LangChain

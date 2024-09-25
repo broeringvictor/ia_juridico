@@ -1,0 +1,87 @@
+{
+    "acoes": [
+        {
+            "id": 1,
+            "acao": "A\u00e7\u00e3o de Alimentos",
+            "provas_renda_genitor": "Comprovantes de rendimentos anexados.",
+            "tipo_guarda": "Guarda compartilhada",
+            "teoria_juridica": "Teoria do Melhor Interesse da Crian\u00e7a",
+            "pedidos_fundamentados": "Fixa\u00e7\u00e3o de alimentos, guarda compartilhada e regulamenta\u00e7\u00e3o de visitas."
+        },
+        {
+            "id": 2,
+            "acao": "A\u00e7\u00e3o de Modifica\u00e7\u00e3o de Guarda",
+            "provas_renda_genitor": null,
+            "tipo_guarda": "Guarda unilateral",
+            "teoria_juridica": "Teoria do Melhor Interesse da Crian\u00e7a",
+            "pedidos_fundamentados": "Concess\u00e3o da guarda unilateral \u00e0 Requerente..."
+        }
+    ],
+    "sqlite_sequence": [
+        {
+            "name": "acoes",
+            "seq": 2
+        },
+        {
+            "name": "dos_fatos",
+            "seq": 4
+        },
+        {
+            "name": "teorias_adicionais",
+            "seq": 5
+        }
+    ],
+    "dos_fatos": [
+        {
+            "id": 1,
+            "acao_id": 1,
+            "chave": "relacionamento",
+            "valor": "As partes mantiveram uma uni\u00e3o est\u00e1vel por mais de sete anos..."
+        },
+        {
+            "id": 2,
+            "acao_id": 1,
+            "chave": "bens",
+            "valor": "Em janeiro de 2021, as partes adquiriram um im\u00f3vel..."
+        },
+        {
+            "id": 3,
+            "acao_id": 2,
+            "chave": "relacionamento",
+            "valor": "As partes mantiveram um relacionamento conjugal por oito anos..."
+        },
+        {
+            "id": 4,
+            "acao_id": 2,
+            "chave": "separacao",
+            "valor": "Ap\u00f3s o t\u00e9rmino do relacionamento em julho de 2020..."
+        }
+    ],
+    "teorias_adicionais": [
+        {
+            "id": 1,
+            "acao_id": 1,
+            "teoria": "Teoria da Solidariedade Familiar"
+        },
+        {
+            "id": 2,
+            "acao_id": 1,
+            "teoria": "Teoria da Apar\u00eancia"
+        },
+        {
+            "id": 3,
+            "acao_id": 2,
+            "teoria": "Doutrina da Prote\u00e7\u00e3o Integral"
+        },
+        {
+            "id": 4,
+            "acao_id": 2,
+            "teoria": "Princ\u00edpio da Prioridade Absoluta"
+        },
+        {
+            "id": 5,
+            "acao_id": 2,
+            "teoria": "Princ\u00edpio da Paternidade Respons\u00e1vel"
+        }
+    ]
+}
